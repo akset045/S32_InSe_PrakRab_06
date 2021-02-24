@@ -14,14 +14,11 @@ namespace PrakRab_06
     public partial class Form1 : Form
     {
         CaesarCipher C1;
-
         public Form1()
         {
             InitializeComponent();
-
             C1 = new CaesarCipher ();
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             int secretKey1 = 29;
@@ -36,11 +33,9 @@ namespace PrakRab_06
             label4.Text = ("Вариант 2: " + encryptedText2);
             label5.Text = ("Вариант 3: " + encryptedText3);
         }
-
         public class CaesarCipher
         {
             const string ABC = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-
             private string CodeEncode(string text, int k)
             {
                 var fullABC = ABC + ABC.ToLower();
@@ -52,7 +47,6 @@ namespace PrakRab_06
                     var index = fullABC.IndexOf(c);
                     if (index < 0)
                     {
-                        //если символ не найден, то добавляем его в неизменном виде
                         retVal += c.ToString();
                     }
                     else
@@ -61,17 +55,11 @@ namespace PrakRab_06
                         retVal += fullABC[codeIndex];
                     }
                 }
-
                 return retVal;
             }
-
             public string Encrypt(string plainMessage, int key) => CodeEncode(plainMessage, key);
-
             public string Decrypt(string encryptedMessage, int key) => CodeEncode(encryptedMessage, -key);
         }
-
-
-
     }
 }
 
