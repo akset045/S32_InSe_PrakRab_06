@@ -13,67 +13,65 @@ namespace PrakRab_06
 {
     public partial class Form1 : Form
     {
-        Cezar Me = new Cezar();
+        CaesarCipher C1;
+
         public Form1()
         {
             InitializeComponent();
+
+            C1 = new CaesarCipher ();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            label1.Text = Me.Codeс(textBox1.Text, key);
+            int secretKey1 = 29;
+            int secretKey2 = 7;
+            int secretKey3 = 14;
+
+            var encryptedText1 = C1.Encrypt(textBox1.Text, secretKey1);
+            var encryptedText2 = C1.Encrypt(textBox1.Text, secretKey2);
+            var encryptedText3 = C1.Encrypt(textBox1.Text, secretKey3);
+
+            label3.Text = ("Вариант 1: " + encryptedText1);
+            label4.Text = ("Вариант 2: " + encryptedText2);
+            label5.Text = ("Вариант 3: " + encryptedText3);
         }
 
-        class Clent
+        public class CaesarCipher
         {
-            string le;
+            const string ABC = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 
-            public Clent(string m)
+            private string CodeEncode(string text, int k)
             {
-                le = m;
-            }
-
-            public string Repl(string m, int key)
-            {
-                int pos = le.IndexOf(m);
-                if (pos == -1) return "";
-                pos = (pos + key) % le.Length;
-                if (pos < 0) pos += le.Length;
-                return le.Substring(pos, 1);
-            }
-        }
-
-        class Cezar : System.Collections.Generic.List<Clent>
-        {
-            public Cezar()
-            {
-                this.Add(new Clent("abcdefghijklmnopqrstuvwxyz"));
-                this.Add(new Clent("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-                this.Add(new Clent("абвгдеёжзийклмнопрстуфхцчшщъыьэюя"));
-                this.Add(new Clent("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"));
-                this.Add(new Clent("0123456789"));
-                this.Add(new Clent("!\"#$%^&*()+=-_'?.,|/`~№:;@[]{}"));
-            }
-
-            public string Codeс(string m, int key)
-            {
-                string res = "", tmp = "";
-                for (int i = 0; i < m.Length; i++)
+                var fullABC = ABC + ABC.ToLower();
+                var letterQty = fullABC.Length;
+                var retVal = "";
+                for (int i = 0; i < text.Length; i++)
                 {
-                    foreach (Clent v in this)
+                    var c = text[i];
+                    var index = fullABC.IndexOf(c);
+                    if (index < 0)
                     {
-                        tmp = v.Repl(m.Substring(i, 1), key);
-                        if (tmp != "")
-                        {
-                            res += tmp;
-                            break;
-                        }
+                        //если символ не найден, то добавляем его в неизменном виде
+                        retVal += c.ToString();
                     }
-                    if (tmp == "") res += m.Substring(i, 1);
+                    else
+                    {
+                        var codeIndex = (letterQty + index + k) % letterQty;
+                        retVal += fullABC[codeIndex];
+                    }
                 }
-                return res;
+
+                return retVal;
             }
+
+            public string Encrypt(string plainMessage, int key) => CodeEncode(plainMessage, key);
+
+            public string Decrypt(string encryptedMessage, int key) => CodeEncode(encryptedMessage, -key);
         }
+
+
+
     }
 }
 
